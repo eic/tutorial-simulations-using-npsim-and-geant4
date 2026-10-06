@@ -41,10 +41,10 @@ We can now specify this HepMC3 input file as input to `ddsim`:
 ddsim --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml --numberOfEvents 10 --inputFiles ep_noradcor_18x275.hepmc --outputFile ep_noradcor_18x275.edm4hep.root
 ```
 
-Instead of downloading files, we can also request events on-demand from the publicly accessible EIC XRootD server, but in this case we must use the `hepmc3.tree.root` input file extension:
+Instead of downloading files, we can also request events on-demand from the publicly accessible EIC XRootD server, with the file location from [Rucio](https://eic.github.io/tutorial-file-access/), but in this case we must use the `hepmc3.tree.root` input file extension:
 
 ```bash
-ddsim --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml --numberOfEvents 10 --inputFiles root://dtn2304.jlab.org:8443//jlab-osdf-ro/eic/EPIC/volatile/EVGEN/DIS/NC/10x100/minQ2=1/pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root --outputFile pythia8NCDIS_10x100.edm4hep.root
+ddsim --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml --numberOfEvents 10 --inputFiles $(rucio replica list file --protocols root --pfns --rses isopenaccess epic:/EVGEN/DIS/NC/10x100/minQ2=1/pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root | head -1) --outputFile pythia8NCDIS_10x100.edm4hep.root
 ```
 
 ## Creating your own input files
