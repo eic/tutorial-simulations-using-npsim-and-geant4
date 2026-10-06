@@ -44,7 +44,7 @@ It is also possible to use a python steering file to control the simulations. Th
 
 The output file is set with `--outputFile`. A default steering file can be written with:
 
-```bash
+```{.bash .ci}
 ddsim --dumpSteeringFile > steering.py
 ```
 
@@ -67,7 +67,7 @@ Some options, such as `SIM.physics.setupUserPhysics`, take as argument a python 
 
 When using the steering file approach, it is often useful to remove all options which you will not change (this allows you to take advantage of updates to the `ddsim` command itself without being stuck on old default settings). In this case, you would simply start from a steering file that only contains:
 
-```python
+```{.python .ci file="steering.py"}
 from DDSim.DD4hepSimulation import DD4hepSimulation
 from g4units import mm, GeV, MeV
 SIM = DD4hepSimulation()
@@ -105,14 +105,17 @@ When we used the minimal steering file, `ddsim` pointed out that we did not spec
 
 The compact file is the entry point of our geometry, for which we must load the geometry environment first
 
-```bash
+```{.bash .ci}
 source /opt/detector/epic-main/bin/thisepic.sh
+```
+
+```bash
 ddsim --steeringFile steering.py --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml
 ```
 
 Next, we will specify that we want `ddsim` to use the DD4hep particle gun, with `--enableGun` (or `-G`), and that we want 10 events, with `--numberOfEvents 10` (or `-N 10`):
 
-```bash
+```{.bash .ci}
 ddsim --steeringFile steering.py --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml -G -N 10
 ```
 
@@ -174,7 +177,7 @@ You will notice that the particle gun has reverted to a default particle in a de
 
 While many of the options have straighforward names, others may be more confusing. The `gun.distribution` option is particularly relevant when we want to distribute single particle events over a range of angles. Depending on your needs, you may prefer one over the other, but in this tutorial we will simply use `cos(theta)` to throw uniformly on the unit sphere in the forward direction:
 
-```bash
+```{.bash .ci}
 ddsim --steeringFile steering.py --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml -G -N 10 --gun.thetaMin "3*deg" --gun.thetaMax "45*deg" --gun.distribution "cos(theta)" --gun.momentumMin "1*GeV" --gun.momentumMax "10*GeV" --gun.particle "pi+"
 ```
 
@@ -215,7 +218,21 @@ The negative endcap corresponds to large polar angles, so set `--gun.thetaMin "1
 `--gun.multiplicity 2`, and `--gun.distribution "cos(theta)"`. Moving these into the steering file as
 `SIM.gun.*` assignments and saving it as `ee_1GeV_10GeV_EndcapN.py` reproduces the same run. The
 `Particle [0]` lines in the output should show electrons with momenta between 1 and 10 GeV pointing
-into the negative endcap.
+into the negative endcap. The steering file then reads:
+
+```{.python .ci file="ee_1GeV_10GeV_EndcapN.py"}
+from DDSim.DD4hepSimulation import DD4hepSimulation
+from g4units import mm, GeV, MeV, deg
+SIM = DD4hepSimulation()
+SIM.enableGun = True
+SIM.gun.particle = "e-"
+SIM.gun.multiplicity = 2
+SIM.gun.thetaMin = 135*deg
+SIM.gun.thetaMax = 177*deg
+SIM.gun.distribution = "cos(theta)"
+SIM.gun.momentumMin = 1*GeV
+SIM.gun.momentumMax = 10*GeV
+```
 
 :::::::::::::::
 
@@ -227,7 +244,7 @@ Until now we have not bothered to check the output files (in case you were wonde
 
 The command line option to use to specify the output file is the `--outputFile` option (or `SIM.outputFile` in the steering file). Depending on the extension of the output file, a specific output file format is chosen. The default output is in the slcio format, but we have standardized on the EDM4hep data model inside ROOT files. To choose this output file format, use a file extension `.edm4hep.root`. We could, for example, run the following command:
 
-```bash
+```{.bash .ci}
 ddsim --steeringFile ee_1GeV_10GeV_EndcapN.py --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml --numberOfEvents 10 --outputFile ee_1GeV_10GeV_EndcapN_1e1.edm4hep.root
 ```
 
