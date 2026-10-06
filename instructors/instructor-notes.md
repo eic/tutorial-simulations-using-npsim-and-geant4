@@ -12,7 +12,7 @@ tutorials and assumes learners already have a working `eic-shell`.
   installed and working. On systems without `/cvmfs` the container download is large and should not
   be done live.
 - The physics-event episode reads large HepMC3 input files from the EIC XRootD server. Network
-  access to `root://dtn-eic.jlab.org` from the training systems should be confirmed beforehand, and
+  access to `root://dtn2304.jlab.org:8443` from the training systems should be confirmed beforehand, and
   learners should be aware that centrally produced files are many GB in size.
 
 ## Timing

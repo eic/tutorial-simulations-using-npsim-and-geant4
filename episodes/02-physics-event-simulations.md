@@ -24,15 +24,15 @@ We now move on to running simulations on HepMC3 event input files from (in this 
 The large input files for simulation campaigns are stored on xrootd, but the `eic-shell` environment allows us to access them. We can connect to the server and take a look at the file:
 
 ```bash
-xrdfs root://dtn-eic.jlab.org
-ls /volatile/eic/EPIC/Tutorials/pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv.hepmc
+xrdfs root://dtn2304.jlab.org:8443
+ls /jlab-osdf-ro/eic/EPIC/volatile/Tutorials/pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv.hepmc
 exit
 ```
 
 This input file is large (GBs). For this tutorial we only need the first few thousand lines. We can do this for the first 20000 lines using the following command:
 
 ```bash
-xrdfs root://dtn-eic.jlab.org cat /volatile/eic/EPIC/Tutorials/pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv.hepmc | head -n 20000 > pythia8NCDIS_10x100.hepmc
+xrdfs root://dtn2304.jlab.org:8443 cat /jlab-osdf-ro/eic/EPIC/volatile/Tutorials/pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv.hepmc | head -n 20000 > pythia8NCDIS_10x100.hepmc
 ```
 
 We can now specify this HepMC3 input file as input to `ddsim`:
@@ -44,7 +44,7 @@ ddsim --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml --numberOfEvents 10 --in
 Instead of downloading files, we can also request events on-demand from the publicly accessible EIC XRootD server, but in this case we must use the `hepmc3.tree.root` input file extension:
 
 ```bash
-ddsim --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml --numberOfEvents 10 --inputFiles root://dtn-eic.jlab.org//work/eic2/EPIC/Tutorials/pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv.hepmc3.tree.root --outputFile pythia8NCDIS_10x100.edm4hep.root
+ddsim --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml --numberOfEvents 10 --inputFiles root://dtn2304.jlab.org:8443//jlab-osdf-ro/eic/EPIC/work/Tutorials/pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv.hepmc3.tree.root --outputFile pythia8NCDIS_10x100.edm4hep.root
 ```
 
 ## Creating your own input files
