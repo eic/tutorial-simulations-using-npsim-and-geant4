@@ -67,21 +67,22 @@ We can compile the code inside the `eic-shell` environment (which includes the P
 
 ```bash
 cd eicSimuBeamEffects/Pythia8
-make
+cmake -S . -B build
+cmake --build build
 ```
 
-After compilation, we can use the executable `runBeamShapeHepMC.exe` to generate events, but we need to provide some arguments:
+After compilation, we can use the executable `bin/runBeamShapeHepMC` to generate events, but we need to provide some arguments:
 
 ```bash
-./runBeamShapeHepMC.exe
+bin/runBeamShapeHepMC
 Wrong number of arguments
 program.exe steer configuration hadronE leptonE xangle out.hist.root out.hepmc
 ```
 
-The various steering files in `steerFiles` contain various beam conitions. Here we will use the 10 GeV electron on 100 GeV proton conditions in the high beam divergence setting (`hiDiv`), or the steering file `dis_eicBeam_hiDiv_10x100`. The `hiDiv` setting requires the `configuration` flag value `1` (as explained in the `README.md` file).
+The various steering files in `steerFiles` contain various beam conitions. Here we will use the 10 GeV electron on 100 GeV proton conditions in the high beam divergence setting (`hiDiv`), or the steering file `dis_eicBeam_hiDiv_10x100_1to10`. The `hiDiv` setting requires the `configuration` flag value `1` (as explained in the `README.md` file).
 
 ```bash
-./runBeamShapeHepMC.exe steerFiles/dis_eicBeam_hiDiv_10x100 1 100 10 -0.025 \
+bin/runBeamShapeHepMC steerFiles/dis_eicBeam_hiDiv_10x100_1to10 1 100 10 -0.025 \
   pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv.hist.root \
   pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv.hepmc
 ```
