@@ -31,19 +31,19 @@ exit
 
 This input file is large (GBs). For this tutorial we only need the first few thousand lines. We can do this for the first 20000 lines using the following command:
 
-```bash
+```{.bash .ci}
 xrdfs root://dtn2304.jlab.org:8443 cat /jlab-osdf-ro/eic/EPIC/volatile/EVGEN/DIS/NC/18x275/noradcor/ep_noradcor.18x275_q2_1_10_run001.hepmc | head -n 20000 > ep_noradcor_18x275.hepmc
 ```
 
 We can now specify this HepMC3 input file as input to `ddsim`:
 
-```bash
+```{.bash .ci}
 ddsim --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml --numberOfEvents 10 --inputFiles ep_noradcor_18x275.hepmc --outputFile ep_noradcor_18x275.edm4hep.root
 ```
 
 Instead of downloading files, we can also request events on-demand from the publicly accessible EIC XRootD server, with the file location from [Rucio](https://eic.github.io/tutorial-file-access/), but in this case we must use the `hepmc3.tree.root` input file extension:
 
-```bash
+```{.bash .ci}
 ddsim --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml --numberOfEvents 10 --inputFiles $(rucio replica list file --protocols root --pfns --rses isopenaccess epic:/EVGEN/DIS/NC/10x100/minQ2=1/pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root | head -1) --outputFile pythia8NCDIS_10x100.edm4hep.root
 ```
 
@@ -59,29 +59,30 @@ In this exercise, we will use Pythia8 to generate DIS neutral current interactio
 
 Rather than relying on the afterburner, we have modified Pythia8 to include the required corrections directly upon event generation. The steering code and input files can be found at [eic/eicSimuBeamEffects](https://github.com/eic/eicSimuBeamEffects), so we start with using git to obtain this code.
 
-```bash
+```{.bash .ci}
 git clone https://github.com/eic/eicSimuBeamEffects
 ```
 
 We can compile the code inside the `eic-shell` environment (which includes the Pythia8 event generator libraries that are used by this simulation):
 
-```bash
+```{.bash .ci}
 cd eicSimuBeamEffects/Pythia8
-make
+cmake -S . -B build
+cmake --build build
 ```
 
-After compilation, we can use the executable `runBeamShapeHepMC.exe` to generate events, but we need to provide some arguments:
+After compilation, we can use the executable `bin/runBeamShapeHepMC` to generate events, but we need to provide some arguments:
 
 ```bash
-./runBeamShapeHepMC.exe
+bin/runBeamShapeHepMC
 Wrong number of arguments
 program.exe steer configuration hadronE leptonE xangle out.hist.root out.hepmc
 ```
 
-The various steering files in `steerFiles` contain various beam conitions. Here we will use the 10 GeV electron on 100 GeV proton conditions in the high beam divergence setting (`hiDiv`), or the steering file `dis_eicBeam_hiDiv_10x100`. The `hiDiv` setting requires the `configuration` flag value `1` (as explained in the `README.md` file).
+The various steering files in `steerFiles` contain various beam conitions. Here we will use the 10 GeV electron on 100 GeV proton conditions in the high beam divergence setting (`hiDiv`), or the steering file `dis_eicBeam_hiDiv_10x100_1to10`. The `hiDiv` setting requires the `configuration` flag value `1` (as explained in the `README.md` file).
 
 ```bash
-./runBeamShapeHepMC.exe steerFiles/dis_eicBeam_hiDiv_10x100 1 100 10 -0.025 \
+bin/runBeamShapeHepMC steerFiles/dis_eicBeam_hiDiv_10x100_1to10 1 100 10 -0.025 \
   pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv.hist.root \
   pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv.hepmc
 ```
@@ -116,6 +117,10 @@ Running `npsim` with the same `--compactFile`, `--inputFiles`, and `--outputFile
 earlier `ddsim` command takes noticeably longer because optical photon physics is now simulated.
 Inspecting the DRICH `*Hits` branch in the output shows many additional hits, including optical
 photons (PDG code -22), that were absent from the `ddsim` output.
+
+```{.bash .ci}
+npsim --compactFile $DETECTOR_PATH/$DETECTOR_CONFIG.xml --numberOfEvents 10 --inputFiles $(rucio replica list file --protocols root --pfns --rses isopenaccess epic:/EVGEN/DIS/NC/10x100/minQ2=1/pythia8NCDIS_10x100_minQ2=1_beamEffects_xAngle=-0.025_hiDiv_1.hepmc3.tree.root | head -1) --outputFile pythia8NCDIS_10x100.edm4hep.root
+```
 
 :::::::::::::::
 
