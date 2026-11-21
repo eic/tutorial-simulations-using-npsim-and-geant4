@@ -1,0 +1,73 @@
+#------------------------------------------------------------
+# Values for this lesson.
+#------------------------------------------------------------
+
+# Which carpentry is this (swc, dc, lc, or cp)?
+# swc: Software Carpentry
+# dc: Data Carpentry
+# lc: Library Carpentry
+# cp: Carpentries (to use for instructor training for instance)
+# incubator: The Carpentries Incubator
+#
+# This option supports custom types so lessons can be branded
+# and themed with your own logo and alt-text (see `carpentry_description`)
+# See https://carpentries.github.io/sandpaper-docs/editing.html#adding-a-custom-logo
+carpentry: 'incubator'
+
+# Alt-text description of the lesson.
+carpentry_description: 'EIC Tutorials'
+
+# Overall title for pages.
+title: 'Simulations using npsim and Geant4'
+
+# Date the lesson was created (YYYY-MM-DD, this is empty by default)
+created: 2022-01-01
+
+# Comma-separated list of keywords for the lesson
+keywords: 'EIC, ePIC, ddsim, npsim, Geant4, DD4hep, simulation, EDM4hep, HepMC3, Pythia8'
+
+# Life cycle stage of the lesson
+# possible values: pre-alpha, alpha, beta, stable
+life_cycle: 'stable'
+
+# License of the lesson
+license: 'CC-BY 4.0'
+
+# Link to the source repository for this lesson
+source: 'https://github.com/eic/tutorial-simulations-using-npsim-and-geant4'
+
+# Default branch of your lesson
+branch: 'main'
+
+# Who to contact if there are any issues
+contact: 'wouter.deconinck@umanitoba.ca'
+
+# Navigation ------------------------------------------------
+#
+# Use the following menu items to specify the order of
+# individual pages in each dropdown section. Leave blank to
+# include all pages in the folder.
+
+# Order of episodes in your lesson
+episodes:
+- 01-single-particle-simulations.md
+- 02-physics-event-simulations.md
+
+# Information for Learners
+learners:
+- setup.md
+- reference.md
+- discuss.md
+
+# Information for Instructors
+instructors:
+- instructor-notes.md
+
+# Learner Profiles
+profiles:
+- learner-profiles.md
+
+# Customisation ---------------------------------------------
+#
+# This space below is where custom yaml items (e.g. pinning
+# sandpaper and varnish versions) should live
